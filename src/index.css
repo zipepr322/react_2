@@ -11,3 +11,57 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.calendar_element_style{
+  background-color: #cebfd2;
+  width: 20px;
+  height: 30px;
+}
+
+.calendar_element_ontoggle{
+  background-color: #3823ad;
+  width: 20px ;
+  height: 30px;
+}
+
+.calendar_section_style {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 66px;
+}
+
+/*.section_syle_border{*/
+/*  border: 1px solid #5a5a5a;*/
+/*}*/
+
+.element_border {
+  border: 1px solid #5a5a5a;
+  user-select: none;
+  /*border-bottom: 1px solid #5a5a5a;*/
+}
+
+.middle_element_border{
+  border-bottom: 1px solid #ffffff;
+  border-top:1px solid #ffffff;
+}
+
+.calendar__everyday_section_style {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  width: 66px;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-side_borders {
+  border-left: 1px black;
+  border-right: 1px black;
+}
