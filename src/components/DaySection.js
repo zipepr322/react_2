@@ -1,8 +1,9 @@
 import React from 'react'
+import classNames from 'classnames'
 
 export default function DaySection () {
     return (
-        <div>
+        <div className={classNames({'daysPosition':true })}>
             <div>Monday</div>
             <div>Tuesday</div>
             <div>Wednesday</div>

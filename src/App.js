@@ -1,68 +1,66 @@
 import React, {useState} from 'react'
 import MainContainer from "./components/MainContainer";
 import defaultTaskList from '../src/list'
-import uuid from 'uuid/dist/v4'
+// import uuid from 'uuid/dist/v4'
 
 function App() {
     const defaultList = JSON.parse(JSON.stringify(defaultTaskList));
     const [calendarElem, setCalendarElem] = useState(defaultList);
+    const [elemCoordinates, setElemCoordinates]= useState([{x:0,y:0}]);
+    const [elemKeyState, setElemKeyState] = useState([{onToggleON:false,onToggleOff:false}]);
 
-    // const middleElem=(innerElem)=>{
-    //     function checkAvailability(arr, val) {
-    //         return arr.some(function(arrVal) {
-    //             return val === arrVal;
-    //         });
-    //     }
-    //     const middleElemArr=[];
-    //     for(const i=2,n=0;i<=innerElem.id;i+3,n+1){
-    //         middleElemArr.push(i);
-    //     }
-    //     //если значение true - делаем прозрачные границы сверху и снизу, доделать
-    //     middleElemArr.some(middleElemArr=>innerElem.id === middleElemArr);
-    //     return false
-    // };
 
-    const calendarElemToggle=(innerElem)=>{
-        // const editedArr = calendarElem.map(newArr=>{
-        //     if (innerElem.id === newArr.id){
-        //         // newArr.id=Date.now();
-        //         // console.log(uuid());
-        //         newArr.toggleOff = !newArr.toggleOff;
-        //         newArr.toggleOn = !newArr.toggleOn;
-        //         return newArr;
-        //     }
-        //     return newArr
-        // });
-        // setCalendarElem(editedArr)
-    };
+    const onMouseDown=(innerElem,event, innerCoordinates)=>{
+      const changedCoordinates=elemCoordinates.map(newElemCoordinates=>{
+        // console.log(innerCoordinates);
+        newElemCoordinates.x=innerElem.x;
+        newElemCoordinates.y=innerElem.y;
+        // console.log(newElemCoordinates);
+        return newElemCoordinates
+      });
 
-    const onMouseDown=(innerElem,event)=>{
-        const editedArr = calendarElem.map(newArr=>{
-            if(newArr.toggleOff){
-                if(newArr.id === innerElem.id){
-                    newArr.toggleOff = false;
-                    newArr.toggleOn= true;
-                    newArr.mouseDown = !newArr.mouseDown;
-                    newArr.onToggleIsActive = true
-                }
+      const keyAccess=elemKeyState.map(newKeyState=>{
+          if(innerElem.toggleOn){
+            newKeyState.onToggleOff=true;
+            newKeyState.onToggleON=false;
+          }
+          if(!innerElem.toggleOn){
+            newKeyState.onToggleOff=false;
+            newKeyState.onToggleON=true;
+          }
+        return newKeyState
+      });
+
+
+      const editedArr = calendarElem.map(newArr=>{
+          if(!newArr.toggleOn){
+              if(newArr.id === innerElem.id){
+                setElemKeyState(keyAccess);
+                setElemCoordinates(changedCoordinates);
+                newArr.toggleOn = true;
                 newArr.mouseDown = !newArr.mouseDown;
-                return newArr
-            }
-            if(newArr.toggleOn){
-                if(newArr.id === innerElem.id){
-                    newArr.toggleOff = true;
-                    newArr.toggleOn= false;
-                    newArr.mouseDown = !newArr.mouseDown;
-                }
+              }
+              // console.log('mouseDown----->Toggle=false');
+              newArr.mouseDown = !newArr.mouseDown;
+              return newArr
+          }
+
+          if(newArr.toggleOn){
+              if(newArr.id === innerElem.id){
+                setElemKeyState(keyAccess);
+                setElemCoordinates(changedCoordinates);
+                newArr.toggleOn = false;
                 newArr.mouseDown = !newArr.mouseDown;
-                return newArr
-            }
+              }
+              // console.log('mouseDown----->Toggle=true');
+              newArr.mouseDown = !newArr.mouseDown;
+              return newArr
+          }
 
-            return newArr
-        });
-        setCalendarElem(editedArr);
+          return newArr
+      });
 
-
+      setCalendarElem(editedArr);
     };
 
     const onMouseUp=(innerElem)=>{
@@ -70,7 +68,6 @@ function App() {
             console.log('check');
             newArr.mouseDown = false;
             if (innerElem.id === newArr.id && newArr.mouseDown){
-                newArr.toggleOff = !newArr.toggleOff;
                 newArr.toggleOn = !newArr.toggleOn;
                 return newArr;
             }
@@ -79,31 +76,66 @@ function App() {
         setCalendarElem(editedArr);
     };
 
-    const onMouseOver=(innerElem, event)=>{
-        const editedArr = calendarElem.map(newArr=>{
-            if (innerElem.id === newArr.id && newArr.mouseDown && newArr.toggleOff){
-                newArr.toggleOff = false;
-                newArr.toggleOn = true;
-                newArr.mouseDown=false;
-                return newArr;
-            }
-            if (innerElem.id === newArr.id && newArr.mouseDown && newArr.toggleOn){
-                newArr.toggleOff = true;
-                newArr.toggleOn = false;
-                newArr.mouseDown=false;
-                return newArr;
-            }
+    const onMouseOver=(innerElem,event)=>{
+      const editedArr = calendarElem.map(newArr=>{
+        if (elemKeyState[0].onToggleON && newArr.mouseDown &&  newArr.x >= elemCoordinates[0].x && newArr.y >= elemCoordinates[0].y && newArr.x < innerElem.x+1 && newArr.y < innerElem.y+1){
+          newArr.toggleOn=true;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleON && newArr.mouseDown &&  newArr.x >= elemCoordinates[0].x && newArr.y <= elemCoordinates[0].y && newArr.x < innerElem.x+1 && newArr.y > innerElem.y-1){
+          newArr.toggleOn=true;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleON && newArr.mouseDown &&  newArr.x <= elemCoordinates[0].x && newArr.y >= elemCoordinates[0].y && newArr.x > innerElem.x-1 && newArr.y < innerElem.y+1){
+          newArr.toggleOn=true;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleON && newArr.mouseDown &&  newArr.x <= elemCoordinates[0].x && newArr.y <= elemCoordinates[0].y && newArr.x > innerElem.x-1 && newArr.y > innerElem.y-1){
+          newArr.toggleOn=true;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleOff && newArr.mouseDown  && newArr.x >= elemCoordinates[0].x && newArr.y >= elemCoordinates[0].y && newArr.x < innerElem.x+1 && newArr.y < innerElem.y+1){
+          newArr.toggleOn=false;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleOff && newArr.mouseDown  && newArr.x >= elemCoordinates[0].x && newArr.y <= elemCoordinates[0].y && newArr.x < innerElem.x+1 && newArr.y > innerElem.y-1){
+          newArr.toggleOn=false;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleOff && newArr.mouseDown && newArr.x <= elemCoordinates[0].x && newArr.y >= elemCoordinates[0].y && newArr.x > innerElem.x-1 && newArr.y < innerElem.y+1){
+          newArr.toggleOn=false;
+          newArr.mouseDown=false;
+          return newArr
+        }
+
+        if (elemKeyState[0].onToggleOff && newArr.mouseDown && newArr.x <= elemCoordinates[0].x && newArr.y <= elemCoordinates[0].y && newArr.x > innerElem.x-1 && newArr.y > innerElem.y-1){
+          newArr.toggleOn=false;
+          newArr.mouseDown=false;
+          return newArr
+        }
             return newArr
         });
         setCalendarElem(editedArr);
-       // console.log(event.type)
+
     };
 
   return (
     <div className="App">
         <MainContainer
+            elemCoordinates={elemCoordinates}
             calendarElem={calendarElem}
-            calendarElemToggle={calendarElemToggle}
             onMouseDown={onMouseDown}
             onMouseOver={onMouseOver}
             onMouseUp={onMouseUp}
@@ -114,27 +146,3 @@ function App() {
 
 export default App;
 
-// const onMouseDown=(innerElem,event)=>{
-//     const editedArr = calendarElem.map(newArr=>{
-//
-//
-//         if(newArr.toggleOff){
-//             console.log('toggleOff---->true');
-//             newArr.mouseDown = true;
-//         }
-//         if(newArr.toggleOn){
-//             newArr.mouseDown = true;
-//         }
-//         // newArr.mouseDown = true;
-//         if (newArr.toggleOff){newArr.onToggleIsActive=true}
-//         if (!newArr.toggleOff){newArr.onToggleIsActive=false}
-//         if (innerElem.id === newArr.id && newArr.mouseDown){
-//             newArr.toggleOff = !newArr.toggleOff;
-//             newArr.toggleOn = !newArr.toggleOn;
-//             return newArr;
-//         }
-//         return newArr
-//     });
-//     setCalendarElem(editedArr);
-//
-// };

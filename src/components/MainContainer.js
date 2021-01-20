@@ -7,10 +7,10 @@ export default function MainContainer  (props) {
         <div style={{display:'flex'}}>
             <DaySection/>
             <CalendarSection calendarElem={props.calendarElem}
-                             calendarElemToggle={props.calendarElemToggle}
                              onMouseDown={props.onMouseDown}
                              onMouseOver={props.onMouseOver}
                              onMouseUp={props.onMouseUp}
+                             elemCoordinates={props.elemCoordinates}
             />
         </div>
     )

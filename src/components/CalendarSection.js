@@ -12,10 +12,10 @@ export default function CalendarSection (props) {
                         return <div key={newElem.id}>
                             <CalendarElement
                                 newElem={newElem}
-                                calendarElemToggle={props.calendarElemToggle}
                                 onMouseDown={props.onMouseDown}
                                 onMouseOver={props.onMouseOver}
                                 onMouseUp={props.onMouseUp}
+                                elemCoordinates={props.elemCoordinates}
                             />
                         </div>
                     }
@@ -28,7 +28,22 @@ export default function CalendarSection (props) {
                         return <div key={newElem.id}>
                             <CalendarElement
                                 newElem={newElem}
-                                calendarElemToggle={props.calendarElemToggle}
+                                onMouseDown={props.onMouseDown}
+                                onMouseOver={props.onMouseOver}
+                                onMouseUp={props.onMouseUp}
+                                elemCoordinates={props.elemCoordinates}
+                            />
+                        </div>
+                    }
+                })}
+            </div>
+
+            <div className={classNames('calendar_section_style','section_syle_border')}>
+                {props.calendarElem.map((newElem)=>{
+                    if(newElem.thirdSection){
+                        return <div key={newElem.id}>
+                            <CalendarElement
+                                newElem={newElem}
                                 onMouseDown={props.onMouseDown}
                                 onMouseOver={props.onMouseOver}
                                 onMouseUp={props.onMouseUp}
@@ -38,37 +53,50 @@ export default function CalendarSection (props) {
                 })}
             </div>
 
-            {/*<div className={classNames('calendar_section_style','section_syle_border')}>*/}
-            {/*    {props.calendarElem.map((newElem)=>{*/}
-            {/*        if(newElem.thirdSection){*/}
-            {/*            return <div key={newElem.id}>*/}
-            {/*                <CalendarElement*/}
-            {/*                    newElem={newElem}*/}
-            {/*                    calendarElemToggle={props.calendarElemToggle}*/}
-            {/*                    onMouseDown={props.onMouseDown}*/}
-            {/*                    onMouseOver={props.onMouseOver}*/}
-            {/*                    onMouseUp={props.onMouseUp}*/}
-            {/*                />*/}
-            {/*            </div>*/}
-            {/*        }*/}
-            {/*    })}*/}
-            {/*</div>*/}
+            <div className={classNames('calendar_section_style','section_syle_border')}>
+                {props.calendarElem.map((newElem)=>{
+                    if(newElem.fourthSection){
+                        return <div key={newElem.id}>
+                            <CalendarElement
+                                newElem={newElem}
+                                onMouseDown={props.onMouseDown}
+                                onMouseOver={props.onMouseOver}
+                                onMouseUp={props.onMouseUp}
+                            />
+                        </div>
+                    }
+                })}
+            </div>
 
-            {/*<div className={classNames('calendar_section_style','section_syle_border')}>*/}
-            {/*    {props.calendarElem.map((newElem)=>{*/}
-            {/*        if(newElem.fourthSection){*/}
-            {/*            return <div key={newElem.id}>*/}
-            {/*                <CalendarElement*/}
-            {/*                    newElem={newElem}*/}
-            {/*                    calendarElemToggle={props.calendarElemToggle}*/}
-            {/*                    onMouseDown={props.onMouseDown}*/}
-            {/*                    onMouseOver={props.onMouseOver}*/}
-            {/*                    onMouseUp={props.onMouseUp}*/}
-            {/*                />*/}
-            {/*            </div>*/}
-            {/*        }*/}
-            {/*    })}*/}
-            {/*</div>*/}
+          <div className={classNames('calendar_section_style','section_syle_border')}>
+            {props.calendarElem.map((newElem)=>{
+              if(newElem.fifthSection){
+                return <div key={newElem.id}>
+                  <CalendarElement
+                    newElem={newElem}
+                    onMouseDown={props.onMouseDown}
+                    onMouseOver={props.onMouseOver}
+                    onMouseUp={props.onMouseUp}
+                  />
+                </div>
+              }
+            })}
+          </div>
+
+          <div className={classNames('calendar_section_style','section_syle_border')}>
+            {props.calendarElem.map((newElem)=>{
+              if(newElem.sixthSection){
+                return <div key={newElem.id}>
+                  <CalendarElement
+                    newElem={newElem}
+                    onMouseDown={props.onMouseDown}
+                    onMouseOver={props.onMouseOver}
+                    onMouseUp={props.onMouseUp}
+                  />
+                </div>
+              }
+            })}
+          </div>
         </div>
 
 
